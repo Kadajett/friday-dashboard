@@ -13,7 +13,7 @@ import type { DashboardConfig } from '@/shared/dashboard-schema'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { SendHorizontal, SignalHigh, SignalLow, SignalMedium } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -217,6 +217,7 @@ function ChatPane({
 function App() {
   const isMobile = useIsMobile()
   const [chatHistory, setChatHistory] = useState<DashboardData['chat']['history']>([])
+  const chatHistorySeeded = useRef(false)
 
   const query = useQuery({
     queryKey: ['dashboard-payload'],
@@ -224,8 +225,14 @@ function App() {
     refetchInterval: (q) => q.state.data?.config.app.refreshIntervalMs ?? 5000,
   })
 
+  const onTranscript = useCallback((entry: DashboardData['chat']['history'][number]) => {
+    setChatHistory((current) => [...current, entry].slice(-120))
+  }, [])
+
   useEffect(() => {
+    if (chatHistorySeeded.current) return
     if (query.data?.data.chat.history) {
+      chatHistorySeeded.current = true
       setChatHistory(query.data.data.chat.history)
     }
   }, [query.data?.data.chat.history])
@@ -239,9 +246,6 @@ function App() {
   }
 
   const { config, data } = query.data
-  const onTranscript = (entry: DashboardData['chat']['history'][number]) => {
-    setChatHistory((current) => [...current, entry].slice(-120))
-  }
 
   if (isMobile) {
     return (

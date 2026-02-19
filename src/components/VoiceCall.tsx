@@ -44,10 +44,15 @@ export function VoiceCall({
   const callStatusRef = useRef(callStatus)
   const pendingLocalCandidatesRef = useRef<RTCIceCandidateInit[]>([])
   const lastAssistantTurnIdRef = useRef<string | null>(null)
+  const onTranscriptRef = useRef(onTranscript)
 
   useEffect(() => {
     callStatusRef.current = callStatus
   }, [callStatus])
+
+  useEffect(() => {
+    onTranscriptRef.current = onTranscript
+  }, [onTranscript])
 
   useEffect(() => {
     return () => cleanup()
@@ -126,10 +131,10 @@ export function VoiceCall({
     reply: ChatEntry
   }) {
     if (payload.userEntry?.message) {
-      onTranscript(payload.userEntry)
+      onTranscriptRef.current(payload.userEntry)
     }
     if (payload.reply?.message) {
-      onTranscript(payload.reply)
+      onTranscriptRef.current(payload.reply)
     }
   }
 
