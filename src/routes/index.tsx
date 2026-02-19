@@ -252,10 +252,18 @@ function App() {
       <div className="h-screen bg-background flex flex-col overflow-hidden">
         <Tabs defaultValue="chat" className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-hidden">
-            <TabsContent value="dashboard" className="m-0 border-0 h-full overflow-y-auto">
+            <TabsContent
+              forceMount
+              value="dashboard"
+              className="m-0 border-0 h-full overflow-y-auto data-[state=inactive]:hidden"
+            >
               <DashboardContent config={config} data={data} />
             </TabsContent>
-            <TabsContent value="chat" className="m-0 border-0 h-full overflow-hidden">
+            <TabsContent
+              forceMount
+              value="chat"
+              className="m-0 border-0 h-full overflow-hidden data-[state=inactive]:hidden"
+            >
               <ChatPane data={data} history={chatHistory} onTranscript={onTranscript} />
             </TabsContent>
           </div>
