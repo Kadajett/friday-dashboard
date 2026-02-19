@@ -42,6 +42,12 @@ const config = defineConfig({
         clientsClaim: true,
         skipWaiting: true,
         navigateFallbackDenylist: [/^\/api\//],
+        runtimeCaching: [
+          {
+            urlPattern: /^\/api\//,
+            handler: 'NetworkOnly',
+          },
+        ],
       },
       manifest: {
         name: 'Friday Dashboard',

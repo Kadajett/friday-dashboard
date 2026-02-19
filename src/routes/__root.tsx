@@ -48,7 +48,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     void import('virtual:pwa-register')
       .then(({ registerSW }) => {
-        registerSW({ immediate: true })
+        registerSW()
       })
       .catch(() => {
         // Service worker support is optional in local dev/runtime environments.

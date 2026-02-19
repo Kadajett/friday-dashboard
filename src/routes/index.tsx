@@ -13,7 +13,7 @@ import type { DashboardConfig } from '@/shared/dashboard-schema'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { SendHorizontal, SignalHigh, SignalLow, SignalMedium } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -217,6 +217,7 @@ function ChatPane({
 function App() {
   const isMobile = useIsMobile()
   const [chatHistory, setChatHistory] = useState<DashboardData['chat']['history']>([])
+  const chatHistorySeeded = useRef(false)
 
   const query = useQuery({
     queryKey: ['dashboard-payload'],
@@ -224,8 +225,14 @@ function App() {
     refetchInterval: (q) => q.state.data?.config.app.refreshIntervalMs ?? 5000,
   })
 
+  const onTranscript = useCallback((entry: DashboardData['chat']['history'][number]) => {
+    setChatHistory((current) => [...current, entry].slice(-120))
+  }, [])
+
   useEffect(() => {
+    if (chatHistorySeeded.current) return
     if (query.data?.data.chat.history) {
+      chatHistorySeeded.current = true
       setChatHistory(query.data.data.chat.history)
     }
   }, [query.data?.data.chat.history])
@@ -239,19 +246,24 @@ function App() {
   }
 
   const { config, data } = query.data
-  const onTranscript = (entry: DashboardData['chat']['history'][number]) => {
-    setChatHistory((current) => [...current, entry].slice(-120))
-  }
 
   if (isMobile) {
     return (
       <div className="h-screen bg-background flex flex-col overflow-hidden">
         <Tabs defaultValue="chat" className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-hidden">
-            <TabsContent value="dashboard" className="m-0 border-0 h-full overflow-y-auto">
+            <TabsContent
+              forceMount
+              value="dashboard"
+              className="m-0 border-0 h-full overflow-y-auto data-[state=inactive]:hidden"
+            >
               <DashboardContent config={config} data={data} />
             </TabsContent>
-            <TabsContent value="chat" className="m-0 border-0 h-full overflow-hidden">
+            <TabsContent
+              forceMount
+              value="chat"
+              className="m-0 border-0 h-full overflow-hidden data-[state=inactive]:hidden"
+            >
               <ChatPane data={data} history={chatHistory} onTranscript={onTranscript} />
             </TabsContent>
           </div>
