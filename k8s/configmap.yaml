@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: friday-dashboard-config
+  namespace: friday-dashboard
+data:
+  dashboard-config.json: |
+    {
+      "app": {
+        "title": "Friday Monitoring Dashboard",
+        "subtitle": "Realtime operational view with autonomous UI composition",
+        "refreshIntervalMs": 4000
+      },
+      "memory": {
+        "directory": "../memory",
+        "maxLines": 12,
+        "maxFiles": 2
+      },
+      "internalState": {
+        "queuedMessages": ["Review heartbeat tasks"],
+        "upcomingEvents": [],
+        "restartReasons": ["Initial deployment"]
+      },
+      "chat": {
+        "status": "idle",
+        "statusText": "Standing by",
+        "history": []
+      },
+      "data": {
+        "plexWatchTime": []
+      },
+      "components": [
+        { "id": "memory", "type": "memory-log-list", "title": "Memory Logs Being Pulled" },
+        { "id": "restart", "type": "last-restart-card", "title": "Last Restart Timestamp" },
+        { "id": "tasks", "type": "active-tasks-table", "title": "Active Background Tasks" },
+        { "id": "system", "type": "system-status", "title": "System Status" },
+        { "id": "internal", "type": "internal-state", "title": "Internal State Visibility" },
+        {
+          "id": "plex-graph",
+          "type": "bar-chart",
+          "title": "Plex Watch Time (Composable Example)",
+          "description": "Injectable chart from backend JSON",
+          "dataKey": "plexWatchTime"
+        }
+      ]
+    }

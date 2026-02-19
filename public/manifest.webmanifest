@@ -1,0 +1,23 @@
+{
+  "name": "Friday Dashboard",
+  "short_name": "Friday",
+  "description": "Installable dashboard for monitoring Friday state",
+  "theme_color": "#0f172a",
+  "background_color": "#020617",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/tanstack-circle-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/tanstack-circle-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

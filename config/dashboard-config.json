@@ -1,0 +1,93 @@
+{
+  "app": {
+    "title": "Friday Monitoring Dashboard",
+    "subtitle": "Realtime operational view with autonomous UI composition",
+    "refreshIntervalMs": 4000
+  },
+  "memory": {
+    "directory": "../memory",
+    "maxLines": 12,
+    "maxFiles": 2
+  },
+  "internalState": {
+    "queuedMessages": [],
+    "upcomingEvents": [
+      {
+        "title": "Nightly cleanup",
+        "at": "2026-02-19T04:00:00Z"
+      }
+    ],
+    "restartReasons": [
+      "Infrastructure stabilization",
+      "Model re-routing (Flash primary)",
+      "Tailscale operator recovery"
+    ]
+  },
+  "chat": {
+    "status": "idle",
+    "statusText": "Awaiting next command",
+    "history": [
+      {
+        "role": "user",
+        "message": "Did you download tell me lies ?",
+        "timestamp": "2026-02-19T00:09:00Z"
+      },
+      {
+        "role": "assistant",
+        "message": "Yes. Tell Me Lies is fully downloaded and available on Plex (26/26 episodes).",
+        "timestamp": "2026-02-19T00:09:15Z"
+      },
+      {
+        "role": "user",
+        "message": "I fixed the friday dashboard hosting. Routing is healthy now.",
+        "timestamp": "2026-02-19T00:10:00Z"
+      }
+    ]
+  },
+  "data": {
+    "usageLedgerDbPath": "../.openclaw/state/usage-ledger.db",
+    "plexWatchTime": [
+      { "label": "Mon", "hours": 1.5 },
+      { "label": "Tue", "hours": 2.2 },
+      { "label": "Wed", "hours": 0.8 },
+      { "label": "Thu", "hours": 3.1 }
+    ]
+  },
+  "components": [
+    {
+      "id": "chat-mirror",
+      "type": "internal-state",
+      "title": "Command & Control Feed",
+      "description": "Live request ledger tracking"
+    },
+    {
+      "id": "usage-summary",
+      "type": "usage-summary",
+      "title": "Claude Usage (Last 24h)",
+      "description": "Token and request aggregates from SQLite usage ledger"
+    },
+    {
+      "id": "memory",
+      "type": "memory-log-list",
+      "title": "Memory Context",
+      "description": "Recent knowledge pulls"
+    },
+    {
+      "id": "tasks",
+      "type": "active-tasks-table",
+      "title": "Background Operations"
+    },
+    {
+      "id": "system",
+      "type": "system-status",
+      "title": "Friday Health"
+    },
+    {
+      "id": "plex-graph",
+      "type": "bar-chart",
+      "title": "Plex Usage",
+      "description": "Weekly watch time statistics",
+      "dataKey": "plexWatchTime"
+    }
+  ]
+}
